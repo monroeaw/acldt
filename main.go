@@ -42,7 +42,7 @@ func (c *Command) ShowUsage() bool {
 }
 
 var commands = []*Command{
-	cmdGit,
+	cmdGitRmerge,
 	cmdVersion,
 	cmdHelp,
 }
