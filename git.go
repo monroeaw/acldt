@@ -72,7 +72,7 @@ func hasRemoteBranch(branch string) bool {
 		return false
 	}
 	for _, line := range bytes.Split(out, []byte{'\n'}) {
-		if string(line) == ("origin/" + branch) {
+		if strings.TrimSpace(string(line)) == ("origin/" + branch) {
 			return true
 		}
 	}
