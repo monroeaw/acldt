@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"log"
 	"os"
 	"os/exec"
@@ -32,19 +33,17 @@ func runGitRmerge(cmd *Command, args []string) {
 		return
 	}
 
-	out, err := exec.Command("git", "rev-parse", "--abbrev-ref", "HEAD").Output()
-	if err != nil {
-		log.Fatal(err)
-	}
-	baseBranch := strings.TrimSpace(string(out))
-
+	baseBranch := getBaseBranch()
 	for _, arg := range args {
 		topicBranch := strings.TrimSpace(arg)
 
 		execCmd("git fetch")
 
 		execCmd("git checkout " + topicBranch)
-		execCmd("git pull origin " + topicBranch)
+		if hasRemoteBranch(topicBranch) {
+			execCmd("git pull origin " + topicBranch)
+		}
+
 		execCmd("git rebase -i origin/" + baseBranch)
 		execCmd("git push origin HEAD -f")
 
@@ -56,6 +55,29 @@ func runGitRmerge(cmd *Command, args []string) {
 		execCmd("git branch -d " + topicBranch)
 		execCmd("git push origin :" + topicBranch)
 	}
+}
+
+func getBaseBranch() string {
+	out, err := exec.Command("git", "rev-parse", "--abbrev-ref", "HEAD").Output()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return strings.TrimSpace(string(out))
+}
+
+func hasRemoteBranch(branch string) bool {
+	out, err := exec.Command("git", "branch", "-r").Output()
+	if err != nil {
+		return false
+	}
+	for _, line := range bytes.Split(out, []byte{'\n'}) {
+		if string(line) == ("origin/" + branch) {
+			return true
+		}
+	}
+
+	return false
 }
 
 func execCmd(input string) {
