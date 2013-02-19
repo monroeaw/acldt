@@ -55,12 +55,6 @@ Supported commands are:
   {{.Name | printf "%-8s"}} {{.Short}}{{end}}{{end}}{{end}}
 
 See 'acldt help [command]' for more information about a command.
-
-Additional help topics:
-{{range .Commands}}{{if not .Runnable}}
-  {{.Name | printf "%-8s"}} {{.Short}}{{end}}{{end}}
-
-See 'acldt help [topic]' for more information about that topic.
 `))
 
 func printUsage() {
