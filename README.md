@@ -20,3 +20,14 @@ Supported commands are:
 
 See 'acldt help [command]' for more information about a command.
 ```
+
+### Installtion
+
+acldt is in beta but you are welcome to try it out. You'll need to
+build it with [Go](http://code.google.com/p/go/).
+
+```bash
+$ go build
+$ cp acldt /usr/local/bin
+$ chmod +x /usr/local/bin/acldt
+```
