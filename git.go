@@ -9,7 +9,7 @@ import (
 )
 
 var cmdGitRmerge = &Command{
-	Usage: "git:rmerge <branch>",
+	Usage: "git:rmerge [<branch>]",
 	Short: "run Git rebase and Git merge with --no-ff",
 	Long: `
 Run Git rebase on a branch and then run Git merge with no fast forward
@@ -47,7 +47,9 @@ func runGitRmerge(cmd *Command, args []string) {
 		execCmd("git push origin HEAD -f")
 
 		execCmd("git checkout " + baseBranch)
-		execCmd("git pull origin " + baseBranch)
+		if hasRemoteBranch(baseBranch) {
+			execCmd("git pull origin " + baseBranch)
+		}
 		execCmd("git merge " + topicBranch + " --no-ff")
 		execCmd("git push origin HEAD")
 
