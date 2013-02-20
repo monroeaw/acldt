@@ -8,7 +8,7 @@ A set of development tools for ACL developers.
 
 ### Usage
 
-```bash
+```plain
 $ acldt help
 Usage: acldt [command] [options] [arguments]
 
@@ -26,7 +26,7 @@ See 'acldt help [command]' for more information about a command.
 acldt is in beta but you are welcome to try it out. You'll need to
 build it with [Go](http://code.google.com/p/go/).
 
-```bash
+```plain
 $ go build
 $ cp acldt /usr/local/bin
 $ chmod +x /usr/local/bin/acldt
