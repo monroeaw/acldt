@@ -28,6 +28,6 @@ build it with [Go](http://code.google.com/p/go/) yourself for now.
 
 ```plain
 $ go build
-$ cp acldt /usr/local/bin
+$ cp acldt /usr/local/bin/
 $ chmod +x /usr/local/bin/acldt
 ```
