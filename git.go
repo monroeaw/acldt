@@ -43,7 +43,6 @@ func runGitRmerge(cmd *Command, args []string) {
 		if hasRemoteBranch(topicBranch) {
 			execCmd("git pull origin " + topicBranch)
 		}
-
 		execCmd("git rebase -i origin/" + baseBranch)
 		execCmd("git push origin HEAD -f")
 
