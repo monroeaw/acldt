@@ -10,7 +10,7 @@ import (
 
 var cmdGitRmerge = &Command{
 	Usage: "git:rmerge [<branch>]",
-	Short: "run Git rebase and Git merge with --no-ff",
+	Short: "run Git rebase and Git merge with --no-ff against current branch",
 	Long: `
 Run Git rebase on a branch and then run Git merge with no fast forward
 (git merge --no-ff).
@@ -19,12 +19,23 @@ As an example, assuming current branch is master, running this command
 rebases a list of topic branches on top of master and then merge them
 into master with no fast forward.
 
-  $ acldt git:rmerge topic1 topic2
+  $ acldt git:rmerge topic1 topic2 ...
+`,
+}
+
+var cmdGitDbranch = &Command{
+	Usage: "git:dbranch [<branch>]",
+	Short: "delete local and remote branches",
+	Long: `
+Delete local and remote branches. For example,
+
+  $ acldt git:dbranch branch1 branch2 ...
 `,
 }
 
 func init() {
 	cmdGitRmerge.Run = runGitRmerge
+	cmdGitDbranch.Run = runGitDbranch
 }
 
 func runGitRmerge(cmd *Command, args []string) {
@@ -53,8 +64,7 @@ func runGitRmerge(cmd *Command, args []string) {
 		execCmd("git merge " + topicBranch + " --no-ff")
 		execCmd("git push origin HEAD")
 
-		execCmd("git branch -d " + topicBranch)
-		execCmd("git push origin :" + topicBranch)
+		deleteBranch(topicBranch)
 	}
 }
 
@@ -79,6 +89,23 @@ func hasRemoteBranch(branch string) bool {
 	}
 
 	return false
+}
+
+func deleteBranch(branch string) {
+	execCmd("git branch -D " + branch)
+	execCmd("git push origin :" + branch)
+}
+
+func runGitDbranch(cmd *Command, args []string) {
+	if len(args) == 0 {
+		cmd.printUsage()
+		return
+	}
+
+	for _, arg := range args {
+		branch := strings.TrimSpace(arg)
+		deleteBranch(branch)
+	}
 }
 
 func execCmd(input string) {
