@@ -14,7 +14,8 @@ Usage: acldt [command] [options] [arguments]
 
 Supported commands are:
 
-  git:rmerge run Git rebase and Git merge with --no-ff
+  git:rmerge run Git rebase and Git merge with --no-ff against current branch
+  git:dbranch delete local and remote branches
   version  show acldt version
   help     show help
 
@@ -32,7 +33,16 @@ As an example, assuming current branch is master, running this command
 rebases a list of topic branches on top of master and then merge them
 into master with no fast forward.
 
-  $ acldt git:rmerge topic1 topic2
+  $ acldt git:rmerge topic1 topic2 ...
+```
+
+```plain
+$ acldt help git:dbranch
+Usage: acldt git:dbranch [<branch>]
+
+Delete local and remote branches. For example,
+
+  $ acldt git:dbranch branch1 branch2 ...
 ```
 
 ### Installation
