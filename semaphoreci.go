@@ -9,16 +9,11 @@ import (
 
 var cmdSemaphoreciWatch = &Command{
 	Usage: "semaphoreci:watch [<dir>]",
-	Short: "watch for Semaphore CI build for a git directory",
+	Short: "watch for Semaphore CI builds for git repositories",
 	Long: `
-Run Git rebase on a branch and then run Git merge with no fast forward
-(git merge --no-ff).
+Watch for Semaphore CI builds for a list of git repositories. For example, 
 
-As an example, assuming current branch is master, running this command
-rebases a list of topic branches on top of master and then merge them
-into master with no fast forward.
-
-  $ acldt git:rmerge topic1 topic2 ...
+  $ acldt semaphoreci:watch dir1, dir2 ...
 `,
 }
 
