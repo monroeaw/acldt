@@ -106,7 +106,7 @@ func pullBuildResult(branch string) {
 
 	dec := json.NewDecoder(resp.Body)
 	for {
-		var projects Project
+		var projects []interface{}
 		if err := dec.Decode(&projects); err == io.EOF {
 			break
 		} else if err != nil {
