@@ -21,9 +21,22 @@ func init() {
 	cmdSemaphoreciWatch.Run = runSemaphoreciWatch
 }
 
+func fileExists(path string) (bool, error) {
+	_, err := os.Stat(path)
+	if err == nil {
+		return true, nil
+	}
+	if os.IsNotExist(err) {
+		return false, nil
+	}
+	return false, err
+}
+
 func getWatchDirs(paths []string) []string {
 	dirsSet := make(map[string]struct{})
 	for _, path := range paths {
+		log.Println(filepath.Glob(path + "/.git/refs/remotes/origin/*"))
+
 		filepath.Walk(path, func(path string, info os.FileInfo, err error) error {
 			if info.IsDir() {
 				dirsSet[path] = struct{}{}
@@ -47,6 +60,12 @@ func runSemaphoreciWatch(cmd *Command, args []string) {
 		return
 	}
 
+	for _, path := range args {
+		if b, _ := fileExists(filepath.Join(path, ".git")); !b {
+			log.Fatal(path + " is not a git repository")
+		}
+	}
+
 	watcher, err := fsnotify.NewWatcher()
 	if err != nil {
 		log.Fatal(err)
@@ -63,9 +82,10 @@ func runSemaphoreciWatch(cmd *Command, args []string) {
 		}
 	}()
 
-	for _, dir := range getWatchDirs(args) {
-		log.Println(dir)
-		err = watcher.Watch(dir)
+	for _, path := range args {
+		gitRemoteDir := filepath.Join(path, ".git", "refs", "remotes", "origin")
+		log.Println(gitRemoteDir)
+		err = watcher.Watch(gitRemoteDir)
 		if err != nil {
 			log.Fatal(err)
 		}
