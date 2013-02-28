@@ -104,9 +104,13 @@ func pullBuildResult(branch string) {
 		name string
 	}
 
+	type Projects struct {
+		projects []Project
+	}
+
 	dec := json.NewDecoder(resp.Body)
 	for {
-		var projects []Project
+		var projects Projects
 		if err := dec.Decode(&projects); err == io.EOF {
 			break
 		} else if err != nil {
