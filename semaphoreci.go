@@ -101,8 +101,20 @@ func pullBuildResult(branch string) {
 	defer resp.Body.Close()
 
 	type Project struct {
-		name string
+		Name string
 	}
+
+	var jsonBlob = []byte(`[
+    {"name": "Platypus", "Order": "Monotremata"},
+    {"name": "Quoll",    "Order": "Dasyuromorphia"}
+  ]`)
+
+	var animals []Project
+	err = json.Unmarshal(jsonBlob, &animals)
+	if err != nil {
+		log.Println("error:", err)
+	}
+	log.Println(animals)
 
 	dec := json.NewDecoder(resp.Body)
 	for {
