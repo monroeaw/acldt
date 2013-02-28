@@ -1,13 +1,13 @@
 package main
 
 import (
+	"encoding/json"
 	"github.com/howeyc/fsnotify"
+	"io"
 	"log"
+	"net/http"
 	"os"
 	"path/filepath"
-  "net/http"
-  "io/ioutil"
-  "encoding/json"
 )
 
 var cmdSemaphoreciWatch = &Command{
@@ -73,7 +73,7 @@ func watchForGitPush(watcher *fsnotify.Watcher) {
 			if ev.IsCreate() {
 				_, file := filepath.Split(ev.Name)
 				if len(filepath.Ext(file)) == 0 {
-          go pullBuildResult(file)
+					go pullBuildResult(file)
 				}
 			}
 		case err := <-watcher.Error:
@@ -94,25 +94,25 @@ func fileExists(path string) (bool, error) {
 }
 
 func pullBuildResult(branch string) {
-  resp, err := http.Get("https://semaphoreapp.com/api/v1/projects?auth_token=Yds3w6o26FLfJTnVK2y9")
-  if err != nil {
-    log.Fatal(err)
-  }
-  defer resp.Body.Close()
+	resp, err := http.Get("https://semaphoreapp.com/api/v1/projects?auth_token=Yds3w6o26FLfJTnVK2y9")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer resp.Body.Close()
 
-  body, err := ioutil.ReadAll(resp.Body)
-  if err != nil {
-    log.Fatal(err)
-  }
+	type Project struct {
+		name string
+	}
 
-  type Project struct {
-    name string
-  }
-  var p Project
-  err = json.Unmarshal(body, &p)
-  if err != nil {
-    log.Fatal(err)
-  }
+	dec := json.NewDecoder(resp.Body)
+	for {
+		var projects []Project
+		if err := dec.Decode(&projects); err == io.EOF {
+			break
+		} else if err != nil {
+			log.Fatal(err)
+		}
 
-  log.Println(p)
+		log.Println(projects)
+	}
 }
