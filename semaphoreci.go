@@ -68,7 +68,8 @@ func watchForGitPush(watcher *fsnotify.Watcher) {
 		select {
 		case ev := <-watcher.Event:
       if ev.IsCreate() {
-        log.Println("event:", ev)
+        _, file := filepath.Split(ev.Name)
+        log.Println("event:", file)
       }
 		case err := <-watcher.Error:
 			log.Println("Erroror:", err)
