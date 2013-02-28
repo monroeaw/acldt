@@ -44,6 +44,7 @@ func (c *Command) ShowUsage() bool {
 var commands = []*Command{
 	cmdGitRmerge,
 	cmdGitDbranch,
+	cmdSemaphoreciWatch,
 	cmdVersion,
 	cmdHelp,
 }
