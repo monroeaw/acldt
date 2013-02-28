@@ -7,6 +7,7 @@ import (
 	"path/filepath"
   "net/http"
   "io/ioutil"
+  "encoding/json"
 )
 
 var cmdSemaphoreciWatch = &Command{
@@ -95,9 +96,23 @@ func fileExists(path string) (bool, error) {
 func pullBuildResult(branch string) {
   resp, err := http.Get("https://semaphoreapp.com/api/v1/projects?auth_token=Yds3w6o26FLfJTnVK2y9")
   if err != nil {
-    // handle error
+    log.Fatal(err)
   }
   defer resp.Body.Close()
+
   body, err := ioutil.ReadAll(resp.Body)
-  log.Println(body)
+  if err != nil {
+    log.Fatal(err)
+  }
+
+  type Project struct {
+    name string
+  }
+  var p Project
+  err = json.Unmarshal(body, &p)
+  if err != nil {
+    log.Fatal(err)
+  }
+
+  log.Println(p)
 }
