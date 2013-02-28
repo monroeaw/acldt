@@ -9,9 +9,9 @@ import (
 
 var cmdSemaphoreciWatch = &Command{
 	Usage: "semaphoreci:watch [<dir>]",
-	Short: "watch for Semaphore CI builds for git repositories",
+	Short: "watch for Semaphore CI builds",
 	Long: `
-Watch for Semaphore CI builds for a list of git repositories. For example, 
+Watch for Semaphore CI builds for a list of git repositories. For example,
 
   $ acldt semaphoreci:watch dir1, dir2 ...
 `,
@@ -19,55 +19,6 @@ Watch for Semaphore CI builds for a list of git repositories. For example,
 
 func init() {
 	cmdSemaphoreciWatch.Run = runSemaphoreciWatch
-}
-
-func fileExists(path string) (bool, error) {
-	_, err := os.Stat(path)
-	if err == nil {
-		return true, nil
-	}
-	if os.IsNotExist(err) {
-		return false, nil
-	}
-	return false, err
-}
-
-func verifyGitDirs(dirs []string) {
-	for _, dir := range dirs {
-		if b, _ := fileExists(filepath.Join(dir, ".git")); !b {
-			log.Fatal(dir + " is not a git repository")
-		}
-	}
-}
-
-func watchForGitPush(watcher *fsnotify.Watcher) {
-	for {
-		select {
-		case ev := <-watcher.Event:
-			log.Println("event:", ev)
-		case err := <-watcher.Error:
-			log.Println("Erroror:", err)
-		}
-	}
-}
-
-func addWatchers(watcher *fsnotify.Watcher, dirs []string) {
-	for _, dir := range dirs {
-		gitRemoteDir := filepath.Join(dir, ".git", "refs", "remotes", "origin")
-		err := watcher.Watch(gitRemoteDir)
-		if err != nil {
-			log.Fatal(err)
-		}
-	}
-}
-
-func createWatcher() *fsnotify.Watcher {
-	watcher, err := fsnotify.NewWatcher()
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	return watcher
 }
 
 func runSemaphoreciWatch(cmd *Command, args []string) {
@@ -83,4 +34,55 @@ func runSemaphoreciWatch(cmd *Command, args []string) {
 	defer watcher.Close()
 
 	select {}
+}
+
+func verifyGitDirs(dirs []string) {
+	for _, dir := range dirs {
+		if b, _ := fileExists(filepath.Join(dir, ".git")); !b {
+			log.Fatal(dir + " is not a git repository")
+		}
+	}
+}
+
+func createWatcher() *fsnotify.Watcher {
+	watcher, err := fsnotify.NewWatcher()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return watcher
+}
+
+func addWatchers(watcher *fsnotify.Watcher, dirs []string) {
+	for _, dir := range dirs {
+		gitRemoteDir := filepath.Join(dir, ".git", "refs", "remotes", "origin")
+		err := watcher.Watch(gitRemoteDir)
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
+}
+
+func watchForGitPush(watcher *fsnotify.Watcher) {
+	for {
+		select {
+		case ev := <-watcher.Event:
+      if ev.IsCreate() {
+        log.Println("event:", ev)
+      }
+		case err := <-watcher.Error:
+			log.Println("Erroror:", err)
+		}
+	}
+}
+
+func fileExists(path string) (bool, error) {
+	_, err := os.Stat(path)
+	if err == nil {
+		return true, nil
+	}
+	if os.IsNotExist(err) {
+		return false, nil
+	}
+	return false, err
 }
