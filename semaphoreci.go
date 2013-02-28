@@ -32,26 +32,42 @@ func fileExists(path string) (bool, error) {
 	return false, err
 }
 
-func getWatchDirs(paths []string) []string {
-	dirsSet := make(map[string]struct{})
-	for _, path := range paths {
-		log.Println(filepath.Glob(path + "/.git/refs/remotes/origin/*"))
+func verifyGitDirs(dirs []string) {
+	for _, dir := range dirs {
+		if b, _ := fileExists(filepath.Join(dir, ".git")); !b {
+			log.Fatal(dir + " is not a git repository")
+		}
+	}
+}
 
-		filepath.Walk(path, func(path string, info os.FileInfo, err error) error {
-			if info.IsDir() {
-				dirsSet[path] = struct{}{}
-			}
+func watchForGitPush(watcher *fsnotify.Watcher) {
+  for {
+    select {
+    case ev := <-watcher.Event:
+      log.Println("event:", ev)
+    case err := <-watcher.Error:
+      log.Println("Erroror:", err)
+    }
+  }
+}
 
-			return nil
-		})
+func addWatchers(watcher *fsnotify.Watcher, dirs []string) {
+  for _, dir := range dirs {
+    gitRemoteDir := filepath.Join(dir, ".git", "refs", "remotes", "origin")
+    err := watcher.Watch(gitRemoteDir)
+    if err != nil {
+      log.Fatal(err)
+    }
+  }
+}
+
+func createWatcher() *fsnotify.Watcher {
+	watcher, err := fsnotify.NewWatcher()
+	if err != nil {
+		log.Fatal(err)
 	}
 
-	dirs := []string{}
-	for dir := range dirsSet {
-		dirs = append(dirs, dir)
-	}
-
-	return dirs
+  return watcher
 }
 
 func runSemaphoreciWatch(cmd *Command, args []string) {
@@ -60,37 +76,10 @@ func runSemaphoreciWatch(cmd *Command, args []string) {
 		return
 	}
 
-	for _, path := range args {
-		if b, _ := fileExists(filepath.Join(path, ".git")); !b {
-			log.Fatal(path + " is not a git repository")
-		}
-	}
-
-	watcher, err := fsnotify.NewWatcher()
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	go func() {
-		for {
-			select {
-			case ev := <-watcher.Event:
-				log.Println("event:", ev)
-			case err := <-watcher.Error:
-				log.Println("Erroror:", err)
-			}
-		}
-	}()
-
-	for _, path := range args {
-		gitRemoteDir := filepath.Join(path, ".git", "refs", "remotes", "origin")
-		log.Println(gitRemoteDir)
-		err = watcher.Watch(gitRemoteDir)
-		if err != nil {
-			log.Fatal(err)
-		}
-	}
-
+  verifyGitDirs(args)
+  watcher := createWatcher()
+	go watchForGitPush(watcher)
+  addWatchers(watcher, args)
 	defer watcher.Close()
 
 	select {}
