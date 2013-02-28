@@ -41,24 +41,24 @@ func verifyGitDirs(dirs []string) {
 }
 
 func watchForGitPush(watcher *fsnotify.Watcher) {
-  for {
-    select {
-    case ev := <-watcher.Event:
-      log.Println("event:", ev)
-    case err := <-watcher.Error:
-      log.Println("Erroror:", err)
-    }
-  }
+	for {
+		select {
+		case ev := <-watcher.Event:
+			log.Println("event:", ev)
+		case err := <-watcher.Error:
+			log.Println("Erroror:", err)
+		}
+	}
 }
 
 func addWatchers(watcher *fsnotify.Watcher, dirs []string) {
-  for _, dir := range dirs {
-    gitRemoteDir := filepath.Join(dir, ".git", "refs", "remotes", "origin")
-    err := watcher.Watch(gitRemoteDir)
-    if err != nil {
-      log.Fatal(err)
-    }
-  }
+	for _, dir := range dirs {
+		gitRemoteDir := filepath.Join(dir, ".git", "refs", "remotes", "origin")
+		err := watcher.Watch(gitRemoteDir)
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
 }
 
 func createWatcher() *fsnotify.Watcher {
@@ -67,7 +67,7 @@ func createWatcher() *fsnotify.Watcher {
 		log.Fatal(err)
 	}
 
-  return watcher
+	return watcher
 }
 
 func runSemaphoreciWatch(cmd *Command, args []string) {
@@ -76,10 +76,10 @@ func runSemaphoreciWatch(cmd *Command, args []string) {
 		return
 	}
 
-  verifyGitDirs(args)
-  watcher := createWatcher()
+	verifyGitDirs(args)
+	watcher := createWatcher()
 	go watchForGitPush(watcher)
-  addWatchers(watcher, args)
+	addWatchers(watcher, args)
 	defer watcher.Close()
 
 	select {}
