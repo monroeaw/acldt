@@ -5,6 +5,8 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+  "net/http"
+  "io/ioutil"
 )
 
 var cmdSemaphoreciWatch = &Command{
@@ -70,7 +72,7 @@ func watchForGitPush(watcher *fsnotify.Watcher) {
 			if ev.IsCreate() {
 				_, file := filepath.Split(ev.Name)
 				if len(filepath.Ext(file)) == 0 {
-					log.Println("event:", file)
+          go pullBuildResult(file)
 				}
 			}
 		case err := <-watcher.Error:
@@ -88,4 +90,14 @@ func fileExists(path string) (bool, error) {
 		return false, nil
 	}
 	return false, err
+}
+
+func pullBuildResult(branch string) {
+  resp, err := http.Get("https://semaphoreapp.com/api/v1/projects?auth_token=Yds3w6o26FLfJTnVK2y9")
+  if err != nil {
+    // handle error
+  }
+  defer resp.Body.Close()
+  body, err := ioutil.ReadAll(resp.Body)
+  log.Println(body)
 }
