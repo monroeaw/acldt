@@ -64,16 +64,18 @@ func addWatchers(watcher *fsnotify.Watcher, dirs []string) {
 }
 
 func watchForGitPush(watcher *fsnotify.Watcher) {
-	select {
-	case ev := <-watcher.Event:
-		if ev.IsCreate() {
-			_, file := filepath.Split(ev.Name)
-			if len(filepath.Ext(file)) == 0 {
-				log.Println("event:", file)
+	for {
+		select {
+		case ev := <-watcher.Event:
+			if ev.IsCreate() {
+				_, file := filepath.Split(ev.Name)
+				if len(filepath.Ext(file)) == 0 {
+					log.Println("event:", file)
+				}
 			}
+		case err := <-watcher.Error:
+			log.Println("Erroror:", err)
 		}
-	case err := <-watcher.Error:
-		log.Println("Erroror:", err)
 	}
 }
 
