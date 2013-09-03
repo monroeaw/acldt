@@ -8,7 +8,7 @@ A set of development tools for ACL developers.
 
 ### Usage
 
-#### acldt help
+#### help
 
 ```plain
 $ acldt help
@@ -33,7 +33,7 @@ GLOBAL OPTIONS:
    --help, -h   show help
 ```
 
-#### acldt git-rmerge
+#### git-rmerge
 
 ```plain
 $ acldt help git-rmerge
@@ -58,7 +58,24 @@ into master with no fast forward.
 OPTIONS:
 ```
 
-#### acldt ey-foreach
+#### git-dbranch
+
+```
+NAME:
+   git-dbranch - Deletes local and remote branches
+
+USAGE:
+   command git-dbranch [command options] [arguments...]
+
+DESCRIPTION:
+   Delete local and remote branches. For example,
+
+  $ acldt git-dbranch branch1 branch2 ...
+
+OPTIONS:
+```
+
+#### ey-foreach
 
 ```
 $ acldt help ey-foreach
