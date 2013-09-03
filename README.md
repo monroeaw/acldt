@@ -22,8 +22,7 @@ VERSION:
    dev
 
 COMMANDS:
-   git-rmerge, gm       Runs Git rebase and Git merge with --no-ff
-against current branch
+   git-rmerge, gm       Runs Git rebase and Git merge with --no-ff against current branch
    git-dbranch, gd      Deletes local and remote branches
    ey-foreach, ef       Applies action for each EY environment
    help, h              Shows a list of commands or help for one command
@@ -38,15 +37,13 @@ GLOBAL OPTIONS:
 ```plain
 $ acldt help git-rmerge
 NAME:
-   git-rmerge - Runs Git rebase and Git merge with --no-ff against
-current branch
+   git-rmerge - Runs Git rebase and Git merge with --no-ff against current branch
 
 USAGE:
    command git-rmerge [command options] [arguments...]
 
 DESCRIPTION:
-
-Run Git rebase on a branch and then run Git merge with no fast forward
+  Run Git rebase on a branch and then run Git merge with no fast forward
 (git merge --no-ff).
 
 As an example, assuming current branch is master, running this command
@@ -98,8 +95,20 @@ OPTIONS:
 
 ### Installation
 
-acldt is in beta but you are welcome to try it out. You'll need to
-build it with [Go](http://code.google.com/p/go/) yourself for now.
+#### Download pre-built binary
+
+Go to the [release page](https://github.com/acl-services/acldt/releases)
+and download the latest distribution. And then:
+
+```plain
+$ cp acldt /usr/local/bin/
+$ chmod +x /usr/local/bin/acldt
+```
+
+#### Build from source
+
+You'll need to setup a [Go](http://code.google.com/p/go/) environment
+first. And then:
 
 ```plain
 $ go build
