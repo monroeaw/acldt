@@ -22,6 +22,7 @@ COMMANDS:
    git-rmerge, gm       Runs Git rebase and Git merge with --no-ff
 against current branch
    git-dbranch, gd      Deletes local and remote branches
+   ey-foreach, ef       Applies action for each EY environment
    help, h              Shows a list of commands or help for one command
 
 GLOBAL OPTIONS:
