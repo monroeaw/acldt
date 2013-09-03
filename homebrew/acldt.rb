@@ -1,6 +1,6 @@
 require "formula"
 
-class Gh < Formula
+class Acldt < Formula
   VERSION = "0.3.0"
   ARCH = if MacOS.prefer_64_bit?
            "amd64"
