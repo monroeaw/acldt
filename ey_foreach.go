@@ -5,7 +5,7 @@ import (
 	"github.com/codegangsta/cli"
 	"log"
 	"regexp"
-	"strings"
+	shellquote "github.com/kballard/go-shellquote"
 )
 
 var eyForeachCmd = cli.Command{
@@ -41,7 +41,7 @@ func eyForeachAction(c *cli.Context) {
 	filteredEnvs := filterEnvs(envs, c.String("a"), c.String("e"))
 
 	for _, env := range filteredEnvs {
-		eyCmd := fmt.Sprintf("ey %s -e %s", strings.Join(c.Args(), " "), env)
+		eyCmd := fmt.Sprintf("ey %s -e %s", shellquote.Join(c.Args()...), env)
 		fmt.Printf("Running: %s\n", eyCmd)
 		execCmd(eyCmd)
 	}

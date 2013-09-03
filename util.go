@@ -1,6 +1,7 @@
 package main
 
 import (
+	shellquote "github.com/kballard/go-shellquote"
 	"log"
 	"os"
 	"os/exec"
@@ -8,7 +9,10 @@ import (
 )
 
 func execCmd(input string) {
-	inputs := strings.Split(input, " ")
+	inputs, err := shellquote.Split(input)
+	if err != nil {
+		inputs = strings.Split(input, " ")
+	}
 	name := inputs[0]
 	args := inputs[1:]
 
@@ -17,14 +21,17 @@ func execCmd(input string) {
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 
-	err := cmd.Run()
+	err = cmd.Run()
 	if err != nil {
 		log.Fatal(err)
 	}
 }
 
 func execCmdOutput(input string) []string {
-	inputs := strings.Split(input, " ")
+	inputs, err := shellquote.Split(input)
+	if err != nil {
+		inputs = strings.Split(input, " ")
+	}
 	name := inputs[0]
 	args := inputs[1:]
 
