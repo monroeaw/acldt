@@ -9,22 +9,36 @@ A set of development tools for ACL developers.
 ### Usage
 
 ```plain
-$ acldt help
-Usage: acldt [command] [options] [arguments]
+NAME:
+   acldt - ACL Development Tools
 
-Supported commands are:
+USAGE:
+   acldt [global options] command [command options] [arguments...]
 
-  git:rmerge run Git rebase and Git merge with --no-ff against current branch
-  git:dbranch delete local and remote branches
-  version  show acldt version
-  help     show help
+VERSION:
+   dev
 
-See 'acldt help [command]' for more information about a command.
+COMMANDS:
+   git-rmerge, gm       Runs Git rebase and Git merge with --no-ff
+against current branch
+   git-dbranch, gd      Deletes local and remote branches
+   help, h              Shows a list of commands or help for one command
+
+GLOBAL OPTIONS:
+   --version    print the version
+   --help, -h   show help
 ```
 
 ```plain
-$ acldt help git:rmerge
-Usage: acldt git:rmerge [<branch>]
+$ acldt help git-rmerge
+NAME:
+   git-rmerge - Runs Git rebase and Git merge with --no-ff against
+current branch
+
+USAGE:
+   command git-rmerge [command options] [arguments...]
+
+DESCRIPTION:
 
 Run Git rebase on a branch and then run Git merge with no fast forward
 (git merge --no-ff).
@@ -33,16 +47,10 @@ As an example, assuming current branch is master, running this command
 rebases a list of topic branches on top of master and then merge them
 into master with no fast forward.
 
-  $ acldt git:rmerge topic1 topic2 ...
-```
+  $ acldt git-rmerge topic1 topic2 ...
 
-```plain
-$ acldt help git:dbranch
-Usage: acldt git:dbranch [<branch>]
+OPTIONS:
 
-Delete local and remote branches. For example,
-
-  $ acldt git:dbranch branch1 branch2 ...
 ```
 
 ### Installation
