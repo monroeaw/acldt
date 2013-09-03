@@ -22,3 +22,25 @@ func execCmd(input string) {
 		log.Fatal(err)
 	}
 }
+
+func execCmdOutput(input string) []string {
+	inputs := strings.Split(input, " ")
+	name := inputs[0]
+	args := inputs[1:]
+
+	out, err := exec.Command(name, args...).Output()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	result := strings.Split(string(out), "\n")
+	output := []string{}
+	for _, o := range result {
+		o = strings.TrimSpace(o)
+		if o != "" {
+			output = append(output, o)
+		}
+	}
+
+	return output
+}

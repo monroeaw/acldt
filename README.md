@@ -8,7 +8,10 @@ A set of development tools for ACL developers.
 
 ### Usage
 
+#### acldt help
+
 ```plain
+$ acldt help
 NAME:
    acldt - ACL Development Tools
 
@@ -22,12 +25,15 @@ COMMANDS:
    git-rmerge, gm       Runs Git rebase and Git merge with --no-ff
 against current branch
    git-dbranch, gd      Deletes local and remote branches
+   ey-foreach, ef       Applies action for each EY environment
    help, h              Shows a list of commands or help for one command
 
 GLOBAL OPTIONS:
    --version    print the version
    --help, -h   show help
 ```
+
+#### acldt git-rmerge
 
 ```plain
 $ acldt help git-rmerge
@@ -50,7 +56,27 @@ into master with no fast forward.
   $ acldt git-rmerge topic1 topic2 ...
 
 OPTIONS:
+```
 
+#### acldt ey-foreach
+
+```
+$ acldt help ey-foreach
+NAME:
+   ey-foreach - Applies action for each EY environment
+
+USAGE:
+   command ey-foreach [command options] [arguments...]
+
+DESCRIPTION:
+   Applies action for each Engineyard environment. For example,
+to upload recipes for each production environment for app Projects:
+
+  $ acldt ey-foreach -a projects -e production recipes upload
+
+OPTIONS:
+   --a ''       app name on EY, e.g., projects
+   --e ''       env name on EY, e.g., production
 ```
 
 ### Installation

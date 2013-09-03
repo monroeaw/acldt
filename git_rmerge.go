@@ -12,8 +12,7 @@ var gitRmergeCmd = cli.Command{
 	Name:      "git-rmerge",
 	ShortName: "gm",
 	Usage:     "Runs Git rebase and Git merge with --no-ff against current branch",
-	Description: `
-Run Git rebase on a branch and then run Git merge with no fast forward
+	Description: `Run Git rebase on a branch and then run Git merge with no fast forward
 (git merge --no-ff).
 
 As an example, assuming current branch is master, running this command
