@@ -1,0 +1,35 @@
+{
+  "FormatVersion": "0.8",
+  "ArtifactsDest": "target",
+  "Arch": "386,amd64",
+  "Os": "darwin,linux,windows",
+  "PackageVersion": "0.2.0",
+  "PrereleaseInfo": "snapshot",
+  "Verbosity": "v",
+  "Resources": {
+    "Include": "INSTALL*,README*,LICENSE*",
+    "Exclude": "*.go"
+  },
+  "TaskSettings": {
+    "archive": {
+      "os": {
+        "linux": "TarGz",
+        "darwin": "TarGz"
+      }
+    },
+    "downloads-page": {
+      "fileheader": "",
+      "filename": ""
+    },
+    "pkg-build": {
+      "metadata": {
+        "description": "ACL Development Tool",
+        "maintainer": "Jingwen Owen Ou (http://owenou.com)"
+      },
+      "metadata-deb": {
+        "Depends": "",
+        "Homepage": "https://github.com/acl-services/acldt"
+      }
+    }
+  }
+}
