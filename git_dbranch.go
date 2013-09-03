@@ -9,8 +9,7 @@ var gitDbranchCmd = cli.Command{
 	Name:      "git-dbranch",
 	ShortName: "gd",
 	Usage:     "Deletes local and remote branches",
-	Description: `
-Delete local and remote branches. For example,
+	Description: `Delete local and remote branches. For example,
 
   $ acldt git-dbranch branch1 branch2 ...`,
 	Action: gitDbranchAction,
