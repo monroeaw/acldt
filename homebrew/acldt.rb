@@ -1,7 +1,7 @@
 require "formula"
 
 class Acldt < Formula
-  VERSION = "0.3.0"
+  VERSION = "0.4.0"
   ARCH = if MacOS.prefer_64_bit?
            "amd64"
          else
