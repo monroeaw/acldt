@@ -13,6 +13,7 @@ func main() {
 	app.Commands = []cli.Command{
 		gitRmergeCmd,
 		gitDbranchCmd,
+		gitTagbuild,
 		eyForeachCmd,
 	}
 

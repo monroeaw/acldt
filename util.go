@@ -9,10 +9,7 @@ import (
 )
 
 func execCmd(input string) {
-	inputs, err := shellquote.Split(input)
-	if err != nil {
-		inputs = strings.Split(input, " ")
-	}
+	inputs := splitShellInput(input)
 	name := inputs[0]
 	args := inputs[1:]
 
@@ -21,17 +18,14 @@ func execCmd(input string) {
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 
-	err = cmd.Run()
+	err := cmd.Run()
 	if err != nil {
 		log.Fatal(err)
 	}
 }
 
 func execCmdOutput(input string) []string {
-	inputs, err := shellquote.Split(input)
-	if err != nil {
-		inputs = strings.Split(input, " ")
-	}
+	inputs := splitShellInput(input)
 	name := inputs[0]
 	args := inputs[1:]
 
@@ -50,4 +44,13 @@ func execCmdOutput(input string) []string {
 	}
 
 	return output
+}
+
+func splitShellInput(input string) []string {
+	inputs, err := shellquote.Split(input)
+	if err != nil {
+		inputs = strings.Split(input, " ")
+	}
+
+	return inputs
 }
